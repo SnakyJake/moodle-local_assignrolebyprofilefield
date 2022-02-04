@@ -25,10 +25,12 @@
 
 $observers = array(
 
+    /*
     array(
         'eventname'   => '\core\event\user_deleted',
         'callback'    => '\local_assignrolebyprofilefield\observers::user_deleted',
     ),
+    */
 
     array(
         'eventname'   => '\core\event\user_updated',

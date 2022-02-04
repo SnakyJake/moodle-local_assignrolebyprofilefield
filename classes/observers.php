@@ -41,8 +41,9 @@ class observers {
      * @param \core\event\user_deleted $event the event
      * @return void
      */
+    /*
     public static function user_deleted(\core\event\user_deleted $event) {
-    }
+    }*/
 
     /**
      * User updated
