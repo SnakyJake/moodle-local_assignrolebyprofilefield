@@ -75,12 +75,14 @@ class observers {
                     if(object_property_exists($userprofile,$fieldname)){
                         $data = $userprofile->$fieldname;
                         role_unassign_all(array('contextid'=>$context->id,'component'=>"local_assignrolebyprofilefield",'roleid'=>$key));
-                        if(is_array($data)){
-                            foreach($data as $value){
-                                role_assign($key,intval($value),$context->id,"local_assignrolebyprofilefield");
+                        if(!empty($data)){
+                            if(is_array($data)){
+                                foreach($data as $value){
+                                    role_assign($key,intval($value),$context->id,"local_assignrolebyprofilefield");
+                                }
+                            } else {
+                                role_assign($key,intval($data),$context->id,"local_assignrolebyprofilefield");
                             }
-                        } else {
-                            role_assign($key,intval($data),$context->id,"local_assignrolebyprofilefield");
                         }
                     }
                 }
