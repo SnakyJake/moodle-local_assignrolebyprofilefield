@@ -52,6 +52,7 @@ class observers {
      * @return void
      */
     public static function user_updated(\core\event\user_updated $event) {
+        //adhoc task?
         global $DB;
         $userprofile = profile_user_record($event->relateduserid);
         $context = \context_user::instance($event->relateduserid);
