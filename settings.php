@@ -46,10 +46,10 @@ if ($hassiteconfig){
     foreach($roles as $role){
         $settings->add(new admin_setting_heading('local_assignrolebyprofilefield/role'.$role->id,'', '<a href="' . $roleurl . '?action=view&amp;roleid=' . $role->id . '">' . $role->localname . '</a>'));
         $settings->add(new admin_setting_configcheckbox('local_assignrolebyprofilefield/roleenabled'.$role->id,get_string('enable'),'',0));
-        $tmp = new admin_setting_configselect('local_assignrolebyprofilefield/linkedfield'.$role->id, get_string('settings_assignrolebyprofilefield_linkedfield','local_assignrolebyprofilefield'),'',null,$options);
+        $tmp = new admin_setting_configselect('local_assignrolebyprofilefield/'.$role->id, get_string('settings_assignrolebyprofilefield_linkedfield','local_assignrolebyprofilefield'),'',null,$options);
         $tmp->add_dependent_on('local_assignrolebyprofilefield/roleenabled'.$role->id);
         $settings->add($tmp);
-        $settings->hide_if('local_assignrolebyprofilefield/linkedfield'.$role->id,'local_assignrolebyprofilefield/roleenabled'.$role->id);
+        $settings->hide_if('local_assignrolebyprofilefield/'.$role->id,'local_assignrolebyprofilefield/roleenabled'.$role->id);
     }
     $ADMIN->add('localplugins',$settings);
 }

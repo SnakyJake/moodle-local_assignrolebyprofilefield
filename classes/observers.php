@@ -25,69 +25,74 @@
 
 namespace local_assignrolebyprofilefield;
 
+use \core\event;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $DB;
 
 class observers {
 
-    private static $_cfg = null;
-    private static $_usercontextroles = null;
+	private static $_cfg = null;
+	private static $_usercontextroles = null;
 
-    /**
-     * User deleted
-     * is this needed?
-     *
-     * @param \core\event\user_deleted $event the event
-     * @return void
-     */
-    /*
-    public static function user_deleted(\core\event\user_deleted $event) {
-    }*/
+	/**
+	 * User deleted
+	 * is this needed?
+	 *
+	 * @param \event\user_deleted $event the event
+	 * @return void
+	 */
+	/*
+	public static function user_deleted(\event\user_deleted $event) {
+	}*/
 
-    /**
-     * User updated
-     *
-     * @param \core\event\user_updated $event the event
-     * @return void
-     */
-    public static function user_updated(\core\event\user_updated $event) {
-        //adhoc task?
-        global $DB;
-        $userprofile = profile_user_record($event->relateduserid);
-        $context = \context_user::instance($event->relateduserid);
+	/**
+	 * User updated
+	 *
+	 * @param event\user_updated $event the event
+	 * @return void
+	 */
+	public static function user_updated(event\user_updated $event)
+	{
+		global $DB;
+		$userid = $event->relateduserid;
+		$contextid = $event->contextid;	// gets contextid in lib/classes/event/user_updated.php:129 and lib/classes/event/base.php:227
+		//$context = \context_user::instance($userid);
 
-        if(!self::$_cfg){
-            self::$_cfg = \get_config('local_assignrolebyprofilefield');
-            
-        }
-        if(!self::$_usercontextroles){
-            self::$_usercontextroles = $DB->get_records('role_context_levels', array('contextlevel' => CONTEXT_USER),'', 'roleid');
-        }
+		foreach (self::get_enabled_roles() as $roleid => $fieldid)
+		{
+			//adhoc task?
+			role_unassign_all(['contextid' => $contextid, 'component' => 'local_assignrolebyprofilefield', 'roleid' => $roleid]);
 
-        foreach(self::$_usercontextroles as $key=>$role){
-            $roleenabled = 'roleenabled'.$role->roleid;
-            if(property_exists(self::$_cfg,$roleenabled) && self::$_cfg->$roleenabled){
-                $property = 'linkedfield'.$role->roleid;
-                if(property_exists(self::$_cfg,$property) && self::$_cfg->$property){
-                    $field_id = intval(self::$_cfg->$property);
-                    $field = $DB->get_record('user_info_field', ['id' => $field_id], '*');
-                    $fieldname = $field->shortname;
-                    if(object_property_exists($userprofile,$fieldname)){
-                        $data = $userprofile->$fieldname;
-                        role_unassign_all(array('contextid'=>$context->id,'component'=>"local_assignrolebyprofilefield",'roleid'=>$key));
-                        if(!empty($data)){
-                            if(is_array($data)){
-                                foreach($data as $value){
-                                    role_assign($key,intval($value),$context->id,"local_assignrolebyprofilefield");
-                                }
-                            } else {
-                                role_assign($key,intval($data),$context->id,"local_assignrolebyprofilefield");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+			if ($data = $DB->get_field('user_info_data', 'data', ['userid' => $userid, 'fieldid' => $fieldid]))
+			{
+				foreach (json_decode($data) as $uid)
+				{
+					role_assign($roleid, intval($uid), $contextid, 'local_assignrolebyprofilefield', $userid);
+				}
+			}
+		}
+	}
+
+	private static function get_enabled_roles()
+	{
+		$cfg = get_config('local_assignrolebyprofilefield');
+		$usercontextroleids = get_roles_for_contextlevels(CONTEXT_USER);
+
+		$result = [];
+
+		foreach ($usercontextroleids as $roleid)
+		{
+			if (property_exists($cfg, 'roleenabled'.$roleid) && $cfg->{'roleenabled'.$roleid})
+			{
+				if (property_exists($cfg, $roleid) && $cfg->$roleid)
+				{
+					$result[$roleid] = $cfg->$roleid;
+				}
+			}
+		}
+
+		return $result;
+	}
 }
