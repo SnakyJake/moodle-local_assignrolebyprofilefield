@@ -23,18 +23,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$observers = array(
+$observers = [
+    [
+        'eventname'   => '\core\event\user_created',
+        'callback'    => '\local_assignrolebyprofilefield\observers::user_updated',
+		'includefile' => 'local/assignrolebyprofilefield/classes/observers.php',
+    ],
 
-    /*
-    array(
-        'eventname'   => '\core\event\user_deleted',
-        'callback'    => '\local_assignrolebyprofilefield\observers::user_deleted',
-    ),
-    */
-
-    array(
+    [
         'eventname'   => '\core\event\user_updated',
         'callback'    => '\local_assignrolebyprofilefield\observers::user_updated',
-    ),
+		'includefile' => 'local/assignrolebyprofilefield/classes/observers.php',
+    ],
 
-);
+];

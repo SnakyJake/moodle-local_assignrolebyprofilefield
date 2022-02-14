@@ -29,31 +29,15 @@ use \core\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-global $DB;
-
-class observers {
-
-	private static $_cfg = null;
-	private static $_usercontextroles = null;
-
-	/**
-	 * User deleted
-	 * is this needed?
-	 *
-	 * @param \event\user_deleted $event the event
-	 * @return void
-	 */
-	/*
-	public static function user_deleted(\event\user_deleted $event) {
-	}*/
-
+class observers
+{
 	/**
 	 * User updated
 	 *
-	 * @param event\user_updated $event the event
+	 * @param event\user_updated|event\user_created $event the event
 	 * @return void
 	 */
-	public static function user_updated(event\user_updated $event)
+	public static function user_updated($event)
 	{
 		global $DB;
 		$userid = $event->relateduserid;
