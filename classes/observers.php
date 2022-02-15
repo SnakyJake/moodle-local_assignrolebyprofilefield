@@ -18,8 +18,8 @@
  * Version details.
  *
  * @package    local_assignrolebyprofilefield
- * @author     Jakob Heinemann <jakob@jakobheinemann.de>
- * @copyright  Jakob Heinemann
+ * @author     Jakob Heinemann <jakob@jakobheinemann.de>, Fabian Bech <f.bech@koppelsberg.de>
+ * @copyright  Jakob Heinemann, Fabian Bech
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,7 +42,6 @@ class observers
 		global $DB;
 		$userid = $event->relateduserid;
 		$contextid = $event->contextid;	// gets contextid in lib/classes/event/user_updated.php:129 and lib/classes/event/base.php:227
-		//$context = \context_user::instance($userid);
 
 		foreach (self::get_enabled_roles() as $roleid => $fieldid)
 		{

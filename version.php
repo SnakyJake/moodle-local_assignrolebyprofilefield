@@ -18,15 +18,15 @@
  * Version details.
  *
  * @package    local_assignrolebyprofilefield
- * @author     Jakob Heinemann <jakob@jakobheinemann.de>
- * @copyright  Jakob Heinemann
+ * @author     Jakob Heinemann <jakob@jakobheinemann.de>, Fabian Bech <f.bech@koppelsberg.de>
+ * @copyright  Jakob Heinemann, Fabian Bech
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_assignrolebyprofilefield';
-$plugin->version  = 2022020102;
-$plugin->release = "0.9.0 ($plugin->version)";
+$plugin->version  = 2022021500;
+$plugin->release = "1.0.0 ($plugin->version)";
 $plugin->requires = 2019111200;
-$plugin->maturity = MATURITY_BETA;
+$plugin->maturity = MATURITY_STABLE;
