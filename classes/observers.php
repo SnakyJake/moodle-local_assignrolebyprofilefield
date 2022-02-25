@@ -50,7 +50,11 @@ class observers
 
 			if ($data = $DB->get_field('user_info_data', 'data', ['userid' => $userid, 'fieldid' => $fieldid]))
 			{
-				foreach (json_decode($data) as $uid)
+				$values = json_decode($data,true);
+				if(!empty($values) && is_string(reset($values))){
+					$values = array_keys($values);
+				}
+				foreach ($values as $uid)
 				{
 					role_assign($roleid, intval($uid), $contextid, 'local_assignrolebyprofilefield', $userid);
 				}
